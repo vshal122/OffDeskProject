@@ -13,6 +13,6 @@ public class LeaveDto {
 
     private Integer userLeaveId;
 
-    private  boolean leaveStatus;
+    private  String leaveStatus;
 
 }

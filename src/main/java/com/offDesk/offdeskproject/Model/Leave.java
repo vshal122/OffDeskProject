@@ -21,12 +21,13 @@ public class Leave {
     @Column(name="end_date")
      private String endDate;
 
-    @Column(name = "leave_status")
-    private  boolean leaveStatus;
+    @Column(name = "leave_status",nullable = false)
+    private String leaveStatus;
 
-    public Leave(String fromDate, String endDate, boolean leaveStatus) {
+    public Leave(String fromDate, String endDate, String leaveStatus) {
         this.fromDate = fromDate;
         this.endDate = endDate;
         this.leaveStatus = leaveStatus;
     }
+    public Leave(){}
 }

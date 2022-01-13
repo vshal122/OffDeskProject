@@ -7,6 +7,9 @@ import com.offDesk.offdeskproject.Service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+import java.util.List;
+
 @RestController
 public class UserControllerImpl implements IUserController{
 
@@ -45,4 +48,26 @@ public class UserControllerImpl implements IUserController{
     public User updateUser(Integer id, User user) {
         return iUserService.updateUser(id,user);
     }
+
+    @Override
+    public List<User> getManagerEmployee() {
+        return iUserService.getManagerEmployee();
+    }
+
+    @Override
+    public List<User> getEmployeeByManagerId(Integer id) {
+        return iUserService.getEmployeeByManagerId(id);
+    }
+
+    @Override
+    public Integer updateLeaveBalance(Integer id) throws ParseException {
+        return iUserService.updateLeaveBalance(id);
+    }
+
+    @Override
+    public Integer checkEmployeeLeave(Integer id) {
+        return iUserService.checkEmployeeLeave(id);
+    }
+
+
 }

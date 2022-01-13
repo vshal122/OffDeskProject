@@ -1,7 +1,6 @@
 package com.offDesk.offdeskproject.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
@@ -45,14 +44,14 @@ public class User {
 
 
     @OneToOne(cascade={CascadeType.ALL})
-    private User manager ;
+    private User manager;
 
 
     @JsonBackReference
     @OneToMany(mappedBy = "manager")
     private Set<User> listOfuser = new HashSet<User>();
 
-    @JsonIgnore
+    //@JsonIgnore
     @OneToMany(fetch= FetchType.EAGER,cascade= CascadeType.ALL,targetEntity = Leave.class)
     @JoinColumn
     private List<Leave> leaveDetails;

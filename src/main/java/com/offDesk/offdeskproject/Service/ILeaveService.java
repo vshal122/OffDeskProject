@@ -4,5 +4,5 @@ import com.offDesk.offdeskproject.Model.Leave;
 
 public interface ILeaveService {
 
-    Leave takeLeaveByEmployee(Leave leave);
+    Leave takeLeaveByEmployee(Leave leave,Integer userIdForLeave);
 }
