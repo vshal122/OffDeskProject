@@ -34,7 +34,8 @@ public class User {
 
     private  String address;
 
-    private  String email;
+   @Column(unique = true,nullable = false)
+     private  String email;
 
     @Column(name = "leave_balance")
     private Integer leaveBalance;

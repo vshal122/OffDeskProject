@@ -10,4 +10,7 @@ public interface IUserRepository extends JpaRepository<User,Integer> {
 
     @Query(value = "select * from user_record c where  c.manager_user_id=?1",nativeQuery = true)
      List<User> EmployeeWithManagerId(Integer id);
+
+    @Query(value = "select * from user_record c where c.email=?1",nativeQuery = true)
+     User getUserByEmail(String email);
 }

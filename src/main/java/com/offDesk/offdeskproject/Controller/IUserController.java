@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.util.List;
-
-@RequestMapping("/user")
+@CrossOrigin("*")
+@RequestMapping("/offdesk/user")
 public interface IUserController {
 
     @PostMapping("/save")
