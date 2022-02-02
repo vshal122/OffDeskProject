@@ -102,10 +102,10 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public Integer checkEmployeeLeave(Integer id) {
+    public User getUserByEmail(Integer id) {
 
          User user = iUserRegistry.getById(id);
-        return  user.getLeaveBalance();
+        return  user;
 
     }
 }

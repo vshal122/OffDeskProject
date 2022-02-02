@@ -23,5 +23,5 @@ public interface IUserService {
 
      Integer updateLeaveBalance(Integer id) throws ParseException;
 
-     Integer checkEmployeeLeave(Integer id);
+     User getUserByEmail(Integer id);
 }

@@ -1,15 +1,18 @@
 package com.offDesk.offdeskproject.Controller;
 
+import com.offDesk.offdeskproject.Dao.ILeaveRepository;
 import com.offDesk.offdeskproject.Dao.IUserRepository;
 import com.offDesk.offdeskproject.Dto.UserDto;
 import com.offDesk.offdeskproject.Model.User;
 import com.offDesk.offdeskproject.Service.IUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
 import java.util.List;
 
+@Slf4j
 @RestController
 public class UserControllerImpl implements IUserController{
 
@@ -19,15 +22,20 @@ public class UserControllerImpl implements IUserController{
     @Autowired
     IUserRepository iUserRepository;
 
+    @Autowired
+    ILeaveRepository iLeaveRepository;
+
     @Override
     public User createUser(UserDto userDto) {
         User user = new User(userDto.getUserName(),userDto.getPassword(),userDto.getJoinDate(),userDto.getMobile(),userDto.getGender(),userDto.getAddress(),userDto.getEmail(),userDto.getLeaveBalance(),userDto.getDesignation());
-       if(userDto.getManagerId()==null)
+       User userManager  =iUserRepository.getUserByEmail(userDto.getManagerUsername());
+       log.info(" UserId:",userManager.getUserId());
+       if(userManager.getUserId()==null)
        {
            return iUserService.userSave(user);
        }
        else {
-           User managerUser = iUserRepository.getById(userDto.getManagerId());
+           User managerUser = iUserRepository.getById(userManager.getUserId());
            user.setManager(managerUser);
            return iUserService.userSave(user);
        }
@@ -65,8 +73,11 @@ public class UserControllerImpl implements IUserController{
     }
 
     @Override
-    public Integer checkEmployeeLeave(Integer id) {
-        return iUserService.checkEmployeeLeave(id);
+    public User getUserByemail(String email) {
+
+       User user= iUserRepository.getUserByEmail(email);
+
+        return iUserService.getUserByEmail(user.getUserId());
     }
 
 

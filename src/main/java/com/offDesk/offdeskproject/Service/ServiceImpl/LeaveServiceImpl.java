@@ -36,4 +36,9 @@ public class LeaveServiceImpl implements ILeaveService {
 
         return leave;
     }
+
+    @Override
+    public List<Leave> getLeaveRecordByMail(Integer id) {
+        return iLeaveRepository.findAllLeaveDetailsById(id);
+    }
 }

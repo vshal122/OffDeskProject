@@ -2,6 +2,7 @@ package com.offDesk.offdeskproject.Configuration;
 
 import com.offDesk.offdeskproject.Helper.JwtUtil;
 import com.offDesk.offdeskproject.Service.ServiceImpl.CustomUserDetailsService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Slf4j
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -45,6 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 username = this.jwtUtil.getUsernameFromToken(jwtToken);
 
+                log.info("USERNAME IN JWT.AUthentication :{}",username);
 
             }catch (Exception e)
             {

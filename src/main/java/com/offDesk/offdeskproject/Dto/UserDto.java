@@ -13,5 +13,5 @@ public class UserDto {
     private  String gender;
     private Integer leaveBalance;
     private String designation;
-    private Integer managerId;
+    private String managerUsername;
 }

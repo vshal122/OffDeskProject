@@ -32,6 +32,6 @@ public interface IUserController {
     @GetMapping("/giveLeaveByManager/{id}")
     Integer updateLeaveBalance(@PathVariable("id") Integer id) throws ParseException;
 
-    @GetMapping("/checkLeave/{id}")
-    Integer checkEmployeeLeave(@PathVariable("id") Integer id);
+    @GetMapping("/getuserbyemail/{email}")
+    User getUserByemail(@PathVariable("email") String email);
 }

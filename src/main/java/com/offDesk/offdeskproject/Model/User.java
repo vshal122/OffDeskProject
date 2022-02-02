@@ -38,7 +38,7 @@ public class User {
      private  String email;
 
     @Column(name = "leave_balance")
-    private Integer leaveBalance;
+    private Integer leaveBalance=12;
 
 
     private  String designation;
