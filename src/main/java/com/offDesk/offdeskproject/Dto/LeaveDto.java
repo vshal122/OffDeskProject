@@ -11,8 +11,10 @@ public class LeaveDto {
 
     private String endDate;
 
-    private Integer userLeaveId;
+    private String userLeaveEmail;
 
     private  String leaveStatus;
+
+    private  String leavePurpose;
 
 }

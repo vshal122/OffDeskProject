@@ -20,11 +20,21 @@ public class LeaveServiceImpl implements ILeaveService {
     IUserRepository iUserRepository;
 
     @Override
-    public Leave takeLeaveByEmployee(Leave leave,Integer userIdForLeave) {
+    public Leave takeLeaveByEmployee(Leave leave,Long userIdForLeave) {
 
+
+
+        Leave leave1 = iLeaveRepository.findLeaveForBalance(userIdForLeave);
+        if(leave1==null) {
+            leave.setLeaveBalance(12);
+        }
+        else {
+            leave.setLeaveBalance(leave1.getLeaveBalance());
+        }
         iLeaveRepository.save(leave);
 
         User user = iUserRepository.getById(userIdForLeave);
+
 
         List<Leave> listOfLeave = user.getLeaveDetails();
         listOfLeave.add(leave);
@@ -38,7 +48,17 @@ public class LeaveServiceImpl implements ILeaveService {
     }
 
     @Override
-    public List<Leave> getLeaveRecordByMail(Integer id) {
+    public List<Leave> getLeaveRecordByMail(Long id) {
         return iLeaveRepository.findAllLeaveDetailsById(id);
+    }
+
+    @Override
+    public Leave checkLeaveBalanceByMail(String gmail) {
+
+            User user = iUserRepository.getUserByEmail(gmail);
+           // Leave leave = iLeaveRepository.findLeaveDetailsUsingUserId(user.getUserId());
+
+                return iLeaveRepository.findLeaveForBalance(user.getUserId());
+
     }
 }

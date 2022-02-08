@@ -11,17 +11,21 @@ public interface IUserService {
 
      User userSave(User user);
 
-     User getuser(Integer id);
+     User getuser(Long id);
 
-     Boolean deleteUser(Integer id);
+     Boolean deleteUser(Long id);
 
-     User updateUser(Integer id,User user);
+     User updateUser(Long id,User user);
 
      List<User> getManagerEmployee();
 
-     List<User> getEmployeeByManagerId(Integer managerId);
+     List<User> getEmployeeByManagerEmail(String email);
 
-     Integer updateLeaveBalance(Integer id) throws ParseException;
+     Boolean giveLeaveApproveByManager(Long id) throws ParseException;
 
-     User getUserByEmail(Integer id);
+     User getUserByEmail(Long id);
+
+      Boolean rejectLeaveByManager(Long leaveId);
+
+      List<User> getEmployeeWaitAndApprovedState(String email);
 }

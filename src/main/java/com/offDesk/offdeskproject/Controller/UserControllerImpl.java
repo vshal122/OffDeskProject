@@ -27,7 +27,8 @@ public class UserControllerImpl implements IUserController{
 
     @Override
     public User createUser(UserDto userDto) {
-        User user = new User(userDto.getUserName(),userDto.getPassword(),userDto.getJoinDate(),userDto.getMobile(),userDto.getGender(),userDto.getAddress(),userDto.getEmail(),userDto.getLeaveBalance(),userDto.getDesignation());
+        String joinDate[]=(userDto.getJoinDate()).split("T");
+        User user = new User(userDto.getUserName(),userDto.getPassword(),joinDate[0],userDto.getMobile(),userDto.getGender(),userDto.getAddress(),userDto.getEmail(),userDto.getDesignation());
        User userManager  =iUserRepository.getUserByEmail(userDto.getManagerUsername());
        log.info(" UserId:",userManager.getUserId());
        if(userManager.getUserId()==null)
@@ -42,18 +43,18 @@ public class UserControllerImpl implements IUserController{
     }
 
     @Override
-    public User searchUser(Integer id) {
+    public User searchUser(Long id) {
         return iUserService.getuser(id);
     }
 
     @Override
-    public Boolean deleteUser(Integer id) {
+    public Boolean deleteUser(Long id) {
         Boolean f= iUserService.deleteUser(id);
         return  f;
     }
 
     @Override
-    public User updateUser(Integer id, User user) {
+    public User updateUser(Long id, User user) {
         return iUserService.updateUser(id,user);
     }
 
@@ -63,13 +64,14 @@ public class UserControllerImpl implements IUserController{
     }
 
     @Override
-    public List<User> getEmployeeByManagerId(Integer id) {
-        return iUserService.getEmployeeByManagerId(id);
+    public List<User> getEmployeeByManagerEmail(String email) {
+
+        return iUserService.getEmployeeByManagerEmail(email);
     }
 
     @Override
-    public Integer updateLeaveBalance(Integer id) throws ParseException {
-        return iUserService.updateLeaveBalance(id);
+    public Boolean giveLeaveApproveByManager(Long id) throws ParseException {
+        return iUserService.giveLeaveApproveByManager(id);
     }
 
     @Override
@@ -78,6 +80,16 @@ public class UserControllerImpl implements IUserController{
        User user= iUserRepository.getUserByEmail(email);
 
         return iUserService.getUserByEmail(user.getUserId());
+    }
+
+    @Override
+    public Boolean rejectLeaveByManager(Long leaveId) {
+        return iUserService.rejectLeaveByManager(leaveId);
+    }
+
+    @Override
+    public List<User> getEmployeeWaitAndApprovedState(String email) {
+        return iUserService.getEmployeeWaitAndApprovedState(email);
     }
 
 

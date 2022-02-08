@@ -15,11 +15,13 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static java.lang.Math.abs;
+
 @Service
 public class UserServiceImpl implements IUserService {
 
     @Autowired
-    IUserRepository iUserRegistry;
+    IUserRepository iUserRepository;
 
     @Autowired
     ILeaveService iLeaveService;
@@ -29,23 +31,23 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public User userSave(User user) {
-        return iUserRegistry.save(user);
+        return iUserRepository.save(user);
 
     }
 
     @Override
-    public User getuser(Integer id) {
-        return iUserRegistry.getById(id);
+    public User getuser(Long id) {
+        return iUserRepository.getById(id);
     }
 
     @Override
-    public Boolean deleteUser(Integer id) {
+    public Boolean deleteUser(Long id) {
         Boolean f=false;
 
-        User user = iUserRegistry.getById(id);
+        User user = iUserRepository.getById(id);
         user.setManager(null);
         if(!f) {
-            iUserRegistry.delete(user);
+            iUserRepository.delete(user);
             f=true;
         }
         return f;
@@ -53,59 +55,95 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public User updateUser(Integer id, User user) {
+    public User updateUser(Long id, User user) {
         user.setUserId(id);
-        return iUserRegistry.save(user);
+        return iUserRepository.save(user);
     }
 
     @Override
     public List<User> getManagerEmployee() {
-        return iUserRegistry.findAll();
+        return iUserRepository.findAll();
     }
 
     @Override
-    public List<User> getEmployeeByManagerId(Integer managerId) {
+    public List<User> getEmployeeByManagerEmail(String email) {
 
-        return iUserRegistry.EmployeeWithManagerId(managerId);
+       User user= iUserRepository.getUserByEmail(email);
+        return iUserRepository.EmployeeWithManagerId(user.getUserId());
     }
 
     @Override
-    public Integer updateLeaveBalance(Integer id) throws ParseException {
+    public Boolean giveLeaveApproveByManager(Long leaveId) throws ParseException {
+        Integer newleave=0,oldLeaveBalance=0,oldTakenLeave=0,oldTotalLeave=0,oldExtraLeave=0;
+        Leave leave = iLeaveRepository.getById(leaveId);
+        Long userIdBYLeaveId=iLeaveRepository.findUserIdByLeaveId(leaveId);
+        Leave   Oldleave = iLeaveRepository.findLeaveForBalance(userIdBYLeaveId);
+        oldLeaveBalance=Oldleave.getLeaveBalance();
+        oldExtraLeave=Oldleave.getExtraLeave();
+        oldTakenLeave=Oldleave.getTakenLeave();
+        oldTotalLeave=Oldleave.getTotalLeave();
 
-
-       Leave leave = iLeaveRepository.findLeaveDetailsUsingUserId(id);
-       User user = iUserRegistry.getById(id);
-       Integer TotalLeave = user.getLeaveBalance();
-        Integer leaveBalance=0;
-       if(leave.getLeaveStatus().equalsIgnoreCase("waiting") && TotalLeave>0) {
-
-           DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-           LocalDate endDate = LocalDate.parse(leave.getEndDate(),dtf);
-           LocalDate fromDate = LocalDate.parse(leave.getFromDate(),dtf);
-           Period diff = Period.between(endDate, fromDate);
-           leaveBalance = -(diff.getDays());
-           TotalLeave=TotalLeave-leaveBalance;
-           leave.setLeaveStatus("accept");
-           user.setLeaveBalance(TotalLeave);
-           iUserRegistry.save(user);
-           iLeaveRepository.save(leave);
-
-
-       } else {
-            leave.setLeaveStatus("reject");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate endDate = LocalDate.parse(leave.getEndDate(),dtf);
+        LocalDate fromDate = LocalDate.parse(leave.getFromDate(),dtf);
+        Period diff = Period.between(endDate, fromDate);
+        newleave = abs(diff.getDays());
+        if(leave.getLeaveBalance()<13 && leave.getLeaveBalance()>0)
+        {
+            leave.setLeaveBalance(oldLeaveBalance-newleave);
+            leave.setTakenLeave(newleave+oldTakenLeave);
+            leave.setTotalLeave(oldTotalLeave+newleave);
+            leave.setExtraLeave(oldExtraLeave);
+            leave.setLeaveStatus("Approved");
             iLeaveRepository.save(leave);
-            TotalLeave = user.getLeaveBalance();
-            System.out.println("My else Method in UPDATE LEAVE BALANCE");
-       }
+            return  true;
 
-        return TotalLeave;
+        }
+        else if(leave.getLeaveBalance()==0)
+        {
+            leave.setTakenLeave(oldTakenLeave+newleave);
+            leave.setExtraLeave(newleave+oldExtraLeave);
+            leave.setTotalLeave(oldTotalLeave+newleave);
+            leave.setLeaveStatus("Approved");
+            iLeaveRepository.save(leave);
+            return  true;
+        }
+       else {
+           return  false;
+        }
+
+
+
+
+
     }
 
     @Override
-    public User getUserByEmail(Integer id) {
+    public User getUserByEmail(Long id) {
 
-         User user = iUserRegistry.getById(id);
+         User user = iUserRepository.getById(id);
         return  user;
 
+    }
+
+ @Override
+ public Boolean rejectLeaveByManager(Long leaveId)
+   {
+       Boolean temp=false;
+       Leave leave = iLeaveRepository.getById(leaveId);
+       if(leave.getLeaveStatus().equalsIgnoreCase("waiting"))
+       {
+           leave.setLeaveStatus("Reject");
+           iLeaveRepository.save(leave);
+           temp= true;
+       }
+   return  temp;
+
+   }
+
+    @Override
+    public List<User> getEmployeeWaitAndApprovedState(String email) {
+        User user = iUserRepository.getUserByEmail(email);
+        return iUserRepository.getAllEmployeeWithStatusWaitAndApprove(user.getUserId());
     }
 }

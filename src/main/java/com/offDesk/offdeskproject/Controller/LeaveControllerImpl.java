@@ -24,10 +24,22 @@ public class LeaveControllerImpl implements ILeaveController{
     ILeaveRepository iLeaveRepository;
 
     @Override
-    public Leave takeLeave(LeaveDto leaveDto) {
-        Leave leave = new Leave(leaveDto.getFromDate(),leaveDto.getEndDate(),leaveDto.getLeaveStatus());
-        Integer  userIdForLeave = leaveDto.getUserLeaveId();
-      return   iLeaveService.takeLeaveByEmployee(leave,userIdForLeave);
+    public Boolean takeLeave(LeaveDto leaveDto) {
+
+        String fromDate[] = (leaveDto.getFromDate()).split("T");
+        String endDate[] = (leaveDto.getEndDate()).split("T");
+        User user=iUserRepository.getUserByEmail(leaveDto.getUserLeaveEmail());
+        Leave leave1 = new Leave(fromDate[0], endDate[0], leaveDto.getLeaveStatus(), leaveDto.getLeavePurpose());
+        log.info("Email Taken Leave Methods:email-", leaveDto.getUserLeaveEmail());
+
+
+            Leave leave = iLeaveRepository.CheckLeaveStatusWaiting(user.getUserId());
+            if (leave == null) {
+                iLeaveService.takeLeaveByEmployee(leave1, user.getUserId());
+                return true;
+            } else {
+                return false;
+            }
 
 
     }
@@ -38,5 +50,10 @@ public class LeaveControllerImpl implements ILeaveController{
        User user= iUserRepository.getUserByEmail(email);
        log.info(" User: {}",user);
        return iLeaveService.getLeaveRecordByMail(user.getUserId());
+    }
+
+    @Override
+    public Leave checkLeaveBalanceByMail(String mail) {
+        return iLeaveService.checkLeaveBalanceByMail(mail);
     }
 }

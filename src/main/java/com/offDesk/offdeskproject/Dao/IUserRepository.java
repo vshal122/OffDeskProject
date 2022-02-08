@@ -6,11 +6,14 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface IUserRepository extends JpaRepository<User,Integer> {
+public interface IUserRepository extends JpaRepository<User,Long> {
 
-    @Query(value = "select * from user_record c where  c.manager_user_id=?1",nativeQuery = true)
-     List<User> EmployeeWithManagerId(Integer id);
+    @Query(value = "SELECT * FROM user_record WHERE  manager_user_id=?1 and  user_id IN(SELECT  leave_details_user_id from leave_record WHERE  leave_status='waiting')",nativeQuery = true)
+     List<User> EmployeeWithManagerId(Long id);
 
     @Query(value = "select * from user_record c where c.email=?1",nativeQuery = true)
      User getUserByEmail(String email);
+
+    @Query(value = "SELECT * FROM user_record WHERE  manager_user_id=?1 and  user_id IN(SELECT  leave_details_user_id from leave_record WHERE  leave_status='Approved' or leave_status='Reject')",nativeQuery = true)
+    List<User> getAllEmployeeWithStatusWaitAndApprove(Long id);
 }

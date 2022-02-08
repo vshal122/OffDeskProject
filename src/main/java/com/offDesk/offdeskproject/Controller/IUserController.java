@@ -14,24 +14,32 @@ public interface IUserController {
     User createUser(@RequestBody UserDto userDto);
 
     @GetMapping("/get/{id}")
-    User searchUser(@PathVariable Integer id);
+    User searchUser(@PathVariable Long id);
 
     @DeleteMapping("delete/{id}")
-    Boolean deleteUser(@PathVariable Integer id);
+    Boolean deleteUser(@PathVariable Long id);
 
     @PutMapping("update/{id}")
-    User updateUser(@RequestBody Integer id,@RequestBody User user);
+    User updateUser(@RequestBody Long id,@RequestBody User user);
 
 
     @GetMapping("/all_employee")
     List<User> getManagerEmployee();
 
-    @GetMapping("/employee_by_managerid/{id}")
-    List<User> getEmployeeByManagerId(@PathVariable("id") Integer id);
+    @GetMapping("/employee_by_managerid/{email}")
+    List<User> getEmployeeByManagerEmail(@PathVariable String email);
 
-    @GetMapping("/giveLeaveByManager/{id}")
-    Integer updateLeaveBalance(@PathVariable("id") Integer id) throws ParseException;
+    @GetMapping("/giveApproveByManager/{id}")
+    Boolean giveLeaveApproveByManager(@PathVariable("id") Long id) throws ParseException;
 
     @GetMapping("/getuserbyemail/{email}")
     User getUserByemail(@PathVariable("email") String email);
+
+    @GetMapping("RejectByManager/{id}")
+    Boolean rejectLeaveByManager(@PathVariable("id") Long leaveId);
+
+    @GetMapping("GetAllEmployeeWithApprovedOrWaitByManager/{email}")
+    List<User> getEmployeeWaitAndApprovedState(@PathVariable String email);
+
+
 }

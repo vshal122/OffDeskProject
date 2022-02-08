@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface ILeaveService {
 
-    Leave takeLeaveByEmployee(Leave leave,Integer userIdForLeave);
+    Leave takeLeaveByEmployee(Leave leave,Long userIdForLeave);
 
-     List<Leave> getLeaveRecordByMail(Integer id);
+     List<Leave> getLeaveRecordByMail(Long id);
+
+     Leave checkLeaveBalanceByMail(String gmail);
 }

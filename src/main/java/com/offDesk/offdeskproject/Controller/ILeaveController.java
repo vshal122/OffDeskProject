@@ -10,8 +10,12 @@ import java.util.List;
 public interface ILeaveController {
 
     @PostMapping("/save")
-    Leave takeLeave(@RequestBody LeaveDto leaveDto);
+    Boolean takeLeave(@RequestBody LeaveDto leaveDto);
 
     @GetMapping("/getleaveuserbyemail/{email}")
     List<Leave> getLeaveRecordByMail(@PathVariable String email);
+
+    @GetMapping("/findLeaveBalance/{mail}")
+    Leave checkLeaveBalanceByMail(@PathVariable String mail);
+
 }
