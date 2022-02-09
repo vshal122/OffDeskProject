@@ -14,6 +14,6 @@ public interface IUserRepository extends JpaRepository<User,Long> {
     @Query(value = "select * from user_record c where c.email=?1",nativeQuery = true)
      User getUserByEmail(String email);
 
-    @Query(value = "SELECT * FROM user_record WHERE  manager_user_id=?1 and  user_id IN(SELECT  leave_details_user_id from leave_record WHERE  leave_status='Approved' or leave_status='Reject')",nativeQuery = true)
-    List<User> getAllEmployeeWithStatusWaitAndApprove(Long id);
+    @Query(value = "SELECT * FROM user_record WHERE  manager_user_id=?1 and  user_id IN(SELECT  leave_details_user_id from leave_record WHERE  leave_status='Approved' or leave_status='Rejected')",nativeQuery = true)
+    List<User> getAllEmployeeWithStatusRejectAndApprove(Long id);
 }

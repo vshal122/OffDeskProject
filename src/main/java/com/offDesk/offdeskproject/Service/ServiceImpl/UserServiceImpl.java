@@ -76,12 +76,19 @@ public class UserServiceImpl implements IUserService {
     public Boolean giveLeaveApproveByManager(Long leaveId) throws ParseException {
         Integer newleave=0,oldLeaveBalance=0,oldTakenLeave=0,oldTotalLeave=0,oldExtraLeave=0;
         Leave leave = iLeaveRepository.getById(leaveId);
-        Long userIdBYLeaveId=iLeaveRepository.findUserIdByLeaveId(leaveId);
-        Leave   Oldleave = iLeaveRepository.findLeaveForBalance(userIdBYLeaveId);
-        oldLeaveBalance=Oldleave.getLeaveBalance();
-        oldExtraLeave=Oldleave.getExtraLeave();
-        oldTakenLeave=Oldleave.getTakenLeave();
-        oldTotalLeave=Oldleave.getTotalLeave();
+
+        Leave   Oldleave = iLeaveRepository.findLeaveDetailsForApprovedLeave(leaveId);
+        if(Oldleave!=null) {
+            oldLeaveBalance = Oldleave.getLeaveBalance();
+            oldExtraLeave = Oldleave.getExtraLeave();
+            oldTakenLeave = Oldleave.getTakenLeave();
+            oldTotalLeave = Oldleave.getTotalLeave();
+        }else {
+            oldLeaveBalance = 12;
+            oldExtraLeave = 0;
+            oldTakenLeave =0;
+            oldTotalLeave =0;
+        }
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate endDate = LocalDate.parse(leave.getEndDate(),dtf);
@@ -133,7 +140,7 @@ public class UserServiceImpl implements IUserService {
        Leave leave = iLeaveRepository.getById(leaveId);
        if(leave.getLeaveStatus().equalsIgnoreCase("waiting"))
        {
-           leave.setLeaveStatus("Reject");
+           leave.setLeaveStatus("Rejected");
            iLeaveRepository.save(leave);
            temp= true;
        }
@@ -144,6 +151,6 @@ public class UserServiceImpl implements IUserService {
     @Override
     public List<User> getEmployeeWaitAndApprovedState(String email) {
         User user = iUserRepository.getUserByEmail(email);
-        return iUserRepository.getAllEmployeeWithStatusWaitAndApprove(user.getUserId());
+        return iUserRepository.getAllEmployeeWithStatusRejectAndApprove(user.getUserId());
     }
 }

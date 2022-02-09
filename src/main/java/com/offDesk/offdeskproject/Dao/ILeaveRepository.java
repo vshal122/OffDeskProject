@@ -24,7 +24,7 @@ public interface ILeaveRepository extends JpaRepository<Leave,Long> {
     @Query(value = " select * from leave_record c where c.leave_details_user_id=?1 and c.leave_status='waiting'",nativeQuery = true)
     Leave CheckLeaveStatusWaiting(Long id);
 
-    @Query(value = "select  leave_details_user_id from leave_record where leave_id=?1",nativeQuery = true)
-    Long findUserIdByLeaveId(Long leaveId);
+    @Query(value = "select * from leave_record c where c.leave_details_user_id=(select  leave_details_user_id from leave_record where leave_id=?1) and c.leave_status='Approved' order by leave_id desc limit 1",nativeQuery = true)
+    Leave findLeaveDetailsForApprovedLeave(Long leaveId);
 
 }
