@@ -28,4 +28,7 @@ public interface IUserService {
       Boolean rejectLeaveByManager(Long leaveId);
 
       List<User> getEmployeeWaitAndApprovedState(String email);
+
+
+      List<String> getAllEmailManager();
 }

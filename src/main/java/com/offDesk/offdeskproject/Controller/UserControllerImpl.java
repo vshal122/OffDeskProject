@@ -29,14 +29,14 @@ public class UserControllerImpl implements IUserController{
     public User createUser(UserDto userDto) {
         String joinDate[]=(userDto.getJoinDate()).split("T");
         User user = new User(userDto.getUserName(),userDto.getPassword(),joinDate[0],userDto.getMobile(),userDto.getGender(),userDto.getAddress(),userDto.getEmail(),userDto.getDesignation());
-       User userManager  =iUserRepository.getUserByEmail(userDto.getManagerUsername());
-       log.info(" UserId:",userManager.getUserId());
-       if(userManager.getUserId()==null)
+        if((userDto.getManagerUsername()).equalsIgnoreCase("null"))
        {
            return iUserService.userSave(user);
        }
        else {
-           User managerUser = iUserRepository.getById(userManager.getUserId());
+           User manager  =iUserRepository.getUserByEmail(userDto.getManagerUsername());
+           log.info("INSIDE USER SAVE METHOD :{}",userDto.getManagerUsername());
+           User managerUser = iUserRepository.getById(manager.getUserId());
            user.setManager(managerUser);
            return iUserService.userSave(user);
        }
@@ -90,6 +90,11 @@ public class UserControllerImpl implements IUserController{
     @Override
     public List<User> getEmployeeWaitAndApprovedState(String email) {
         return iUserService.getEmployeeWaitAndApprovedState(email);
+    }
+
+    @Override
+    public List<String> getEmailAllManager() {
+        return iUserService.getAllEmailManager();
     }
 
 

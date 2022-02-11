@@ -153,4 +153,9 @@ public class UserServiceImpl implements IUserService {
         User user = iUserRepository.getUserByEmail(email);
         return iUserRepository.getAllEmployeeWithStatusRejectAndApprove(user.getUserId());
     }
+
+    @Override
+    public List<String> getAllEmailManager() {
+        return iUserRepository.getAllManager();
+    }
 }

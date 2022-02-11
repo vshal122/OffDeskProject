@@ -41,5 +41,8 @@ public interface IUserController {
     @GetMapping("GetAllEmployeeWithApprovedOrWaitByManager/{email}")
     List<User> getEmployeeWaitAndApprovedState(@PathVariable String email);
 
+    @GetMapping("/getAllmanager")
+    List<String> getEmailAllManager();
+
 
 }
