@@ -15,13 +15,6 @@ public class OffdeskprojectApplication {
 		SpringApplication.run(OffdeskprojectApplication.class, args);
 
 	}
-//		@EventListener(ApplicationReadyEvent.class)
-//		public void sendMail ()
-//		{
-//			System.out.println("THIS IS MY Main Entry Class ");
-//			mailCommunicationService.mailSend("mansoori9399@gmail.com", "this is my first mail", "forsick leave today i am not well");
-//			System.out.println("THIS IS MY Main Class ");
-//		}
 
 
 }

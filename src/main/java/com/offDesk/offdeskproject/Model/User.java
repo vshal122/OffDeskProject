@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
 @Entity
 @Table(name = "user_record")
 @JsonIgnoreProperties(value={"hibernateLazyInitializer","handler"})
@@ -55,6 +56,7 @@ public class User {
     @OneToMany(fetch= FetchType.EAGER,cascade= CascadeType.ALL,targetEntity = Leave.class)
     @JoinColumn
     private List<Leave> leaveDetails;
+
 
     public User(String userName, String password, String joinDate, String mobile,String gender ,String address, String email, String designation) {
         this.userName = userName;
