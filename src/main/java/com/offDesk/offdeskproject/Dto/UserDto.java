@@ -11,7 +11,6 @@ public class UserDto {
     private String address;
     private String email;
     private  String gender;
-    private Integer leaveBalance;
     private String designation;
     private String managerUsername;
 }

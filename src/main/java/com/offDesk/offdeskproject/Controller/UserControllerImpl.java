@@ -42,10 +42,7 @@ public class UserControllerImpl implements IUserController{
        }
     }
 
-    @Override
-    public User searchUser(Long id) {
-        return iUserService.getuser(id);
-    }
+
 
     @Override
     public Boolean deleteUser(Long id) {

@@ -13,9 +13,6 @@ public interface IUserController {
     @PostMapping("/save")
     User createUser(@RequestBody UserDto userDto);
 
-    @GetMapping("/get/{id}")
-    User searchUser(@PathVariable Long id);
-
     @DeleteMapping("delete/{id}")
     Boolean deleteUser(@PathVariable Long id);
 
@@ -38,7 +35,7 @@ public interface IUserController {
     @GetMapping("RejectByManager/{id}")
     Boolean rejectLeaveByManager(@PathVariable("id") Long leaveId);
 
-    @GetMapping("GetAllEmployeeWithApprovedOrWaitByManager/{email}")
+    @GetMapping("GetAllEmployeeWithApprovedOrrejectByManager/{email}")
     List<User> getEmployeeWaitAndApprovedState(@PathVariable String email);
 
     @GetMapping("/getAllmanager")

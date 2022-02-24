@@ -35,10 +35,7 @@ public class UserServiceImpl implements IUserService {
 
     }
 
-    @Override
-    public User getuser(Long id) {
-        return iUserRepository.getById(id);
-    }
+
 
     @Override
     public Boolean deleteUser(Long id) {
@@ -95,7 +92,7 @@ public class UserServiceImpl implements IUserService {
         LocalDate fromDate = LocalDate.parse(leave.getFromDate(),dtf);
         Period diff = Period.between(endDate, fromDate);
         newleave = abs(diff.getDays());
-        if(leave.getLeaveBalance()<13 && leave.getLeaveBalance()>0)
+        if(oldLeaveBalance<13 && oldLeaveBalance>0 && newleave<oldLeaveBalance)
         {
             leave.setLeaveBalance(oldLeaveBalance-newleave);
             leave.setTakenLeave(newleave+oldTakenLeave);
@@ -106,11 +103,14 @@ public class UserServiceImpl implements IUserService {
             return  true;
 
         }
-        else if(leave.getLeaveBalance()==0)
+        else if(leave.getLeaveBalance()==0 || newleave>oldLeaveBalance)
         {
-            leave.setTakenLeave(oldTakenLeave+newleave);
-            leave.setExtraLeave(newleave+oldExtraLeave);
-            leave.setTotalLeave(oldTotalLeave+newleave);
+            if(oldLeaveBalance>0) {
+                leave.setTakenLeave(oldTakenLeave + newleave+oldLeaveBalance);
+                leave.setTotalLeave(oldTotalLeave + newleave+oldLeaveBalance);
+            }
+            leave.setExtraLeave(newleave + oldExtraLeave);
+            leave.setLeaveBalance(0);
             leave.setLeaveStatus("Approved");
             iLeaveRepository.save(leave);
             return  true;
